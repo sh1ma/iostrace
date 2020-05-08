@@ -1,8 +1,19 @@
 import frida
 import sys
 
-def on_message(meesage, _):
-    print(meesage["payload"])
+with open("syscall.txt", "r") as f:
+    raw_syscall_list = f.readlines()
+
+syscalls = [syscall.split(". ") for syscall in raw_syscall_list]
+syscalls = {syscall[0]:syscall[1] for syscall in syscalls}
+
+def on_message(message, _):
+    thread_id, syscall_number = message["payload"].split(":")
+    syscall_number = str(abs(int(syscall_number)))
+    if syscall_number in syscalls.keys():
+        print(f"[{thread_id}]: {syscalls[syscall_number]}")
+    else:
+        print(f"[{thread_id}]: Unknown({syscall_number})")
 
 
 def on_detached():

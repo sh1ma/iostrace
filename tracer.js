@@ -10,7 +10,7 @@ function isThreadFollowed(tid) {
 
 function FollowThread(tid) {
   ThreadsFollowed[tid] = true;
-  send("[+] Following thread " + tid);
+  console.log("[+] Following thread " + tid);
   Stalker.follow(tid, {
     transform: function (iterator) {
       const instruction = iterator.next();
@@ -21,7 +21,7 @@ function FollowThread(tid) {
         iterator.keep();
       } while ((instruction = iterator.next()) !== null);
       function onMatch(context) {
-        send(tid + ": " + context.x16.toInt32());
+        send(tid + ":" + context.x16.toInt32());
       }
     },
   });
@@ -32,7 +32,7 @@ function UnfollowThread(threadId) {
     return;
   }
   delete ThreadsFollowed[threadId];
-  send("[+] Unfollowing thread " + threadId);
+  console.log("[+] Unfollowing thread " + threadId);
   Stalker.unfollow(threadId);
   Stalker.garbageCollect();
 }
