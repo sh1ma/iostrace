@@ -40,6 +40,8 @@
 41. dup
 42. pipe
 43. getegid
+44. profil
+45. ktrace
 46. sigaction
 47. getgid
 48. sigprocmask
