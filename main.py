@@ -5,7 +5,7 @@ with open("syscall.txt", "r") as f:
     raw_syscall_list = f.readlines()
 
 syscalls = [syscall.split(". ") for syscall in raw_syscall_list]
-syscalls = {syscall[0]:syscall[1] for syscall in syscalls}
+syscalls = {syscall[0]:syscall[1].rstrip("\n") for syscall in syscalls}
 
 def on_message(message, _):
     thread_id, syscall_number = message["payload"].split(":")
