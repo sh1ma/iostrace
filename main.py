@@ -28,7 +28,12 @@ def main(target: str) -> None:
             app_identifier: str = app.identifier
             break
 
-    pid = device.spawn([app_identifier])
+    try:
+        pid = device.spawn([app_identifier])
+    except frida.NotSupportedError as e:
+        print(e)
+        return
+
     session = device.attach(pid)
     session.on('detached', on_detached)
 
