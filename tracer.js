@@ -19,7 +19,7 @@ function FollowThread(tid) {
           iterator.putCallout(onMatch);
         }
         iterator.keep();
-      } while ((instruction = iterator.next()) !== null);
+      } while (iterator.next() !== null);
       function onMatch(context) {
         send(tid + ":" + context.x16.toInt32());
       }
@@ -38,8 +38,7 @@ function UnfollowThread(threadId) {
 }
 
 function ThreadStalker() {
-  FollowThread(Process.getCurrentThreadId());
-  Interceptor.attach(Module.getExportByName(null, "_pthread_start"), {
+  Interceptor.attach(Module.getExportByName(null, "pthread_create"), {
     onEnter(args) {
       if (isThreadFollowed(this.threadId)) {
         return;
@@ -57,4 +56,9 @@ function ThreadStalker() {
   });
 }
 
+const ths = Process.enumerateThreads();
+console.log(JSON.stringify(ths));
+ths.forEach((el) => {
+  FollowThread(el.id);
+});
 ThreadStalker();

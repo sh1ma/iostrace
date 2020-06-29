@@ -129,7 +129,7 @@
 165. quotactl
 167. mount
 169. csops
-170. 170old table
+170. csops_audittoken
 173. waitid
 180. kdebug_trace
 181. setgid
