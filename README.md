@@ -10,3 +10,5 @@ pip3 install frida-tools
 ```
 npm global install iostrace
 ```
+
+Bug reports and enhancements are welcome!!
