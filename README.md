@@ -1,3 +1,12 @@
 # Node Version
+if you didn't installed frida yet. Please install frida in the following command.
 
-## How to use
+```
+pip3 install frida-tools
+```
+
+## How to install
+
+```
+npm global install iostrace
+```
