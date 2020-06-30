@@ -1,0 +1,37 @@
+{
+  "name": "iostrace",
+  "version": "1.0.0",
+  "main": "index.js",
+  "description": "strace on frida for iOS",
+  "repository": "ssh://git@github.com/sh1ma/iostrace.git",
+  "author": "sh1ma <in9lude@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^5.1.0",
+    "frida": "^12.10.4"
+  },
+  "devDependencies": {
+    "@types/frida-gum": "^16.0.0",
+    "@types/node": "^14.0.14",
+    "frida-compile": "^9.3.0"
+  },
+  "files": [
+    "/dist/tracer.js",
+    "/index.js",
+    "/syscall.txt"
+  ],
+  "bin": {
+    "iostrace": "./index.js"
+  },
+  "keywords": [
+    "ios",
+    "syscall",
+    "trace",
+    "frida"
+  ],
+  "scripts": {
+    "prepare": "yarn build",
+    "build": "frida-compile src/tracer.js -o dist/tracer.js && cp src/syscalls.json dist/syscalls.json"
+  },
+  "homepage": "https://github.com/sh1ma/frida-iOS-syscall-tracer#readme"
+}

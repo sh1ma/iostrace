@@ -20,10 +20,14 @@ function FollowThread(tid) {
         }
         iterator.keep();
       } while (iterator.next() !== null);
-      function onMatch(context) {
-        send(tid + ":" + context.x16.toInt32());
-      }
     },
+    onMatch: function(context) {
+      send({
+        calledNumber: context.x16.toInt32(),
+        moduleAddress: `${DebugSymbol.fromAddress(context.pc).moduleName}!${DebugSymbol.fromAddress(context.pc).address}`
+      })
+    }
+
   });
 }
 
@@ -57,7 +61,6 @@ function ThreadStalker() {
 }
 
 const ths = Process.enumerateThreads();
-console.log(JSON.stringify(ths));
 ths.forEach((el) => {
   FollowThread(el.id);
 });
