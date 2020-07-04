@@ -1,6 +1,6 @@
 {
   "name": "iostrace",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "description": "strace on frida for iOS",
   "repository": "ssh://git@github.com/sh1ma/iostrace.git",
