@@ -8,26 +8,28 @@ function isThreadFollowed(tid) {
   }
 }
 
+function onMatch(context) {
+  // send({calledNumber: 1, moduleAddress: "hello"})
+  send({
+    calledNumber: context.x16.toInt32(),
+    moduleAddress: `${DebugSymbol.fromAddress(context.pc).moduleName}!${DebugSymbol.fromAddress(context.pc).address}`
+  })
+}
+
 function FollowThread(tid) {
   ThreadsFollowed[tid] = true;
   console.log("[+] Following thread " + tid);
   Stalker.follow(tid, {
-    transform: function (iterator) {
+    transform: function(iterator) {
       const instruction = iterator.next();
       do {
+        // console.log(instruction)
         if (instruction.mnemonic === "svc") {
           iterator.putCallout(onMatch);
         }
         iterator.keep();
       } while (iterator.next() !== null);
-    },
-    onMatch: function(context) {
-      send({
-        calledNumber: context.x16.toInt32(),
-        moduleAddress: `${DebugSymbol.fromAddress(context.pc).moduleName}!${DebugSymbol.fromAddress(context.pc).address}`
-      })
     }
-
   });
 }
 
@@ -42,21 +44,16 @@ function UnfollowThread(threadId) {
 }
 
 function ThreadStalker() {
-  Interceptor.attach(Module.getExportByName(null, "pthread_create"), {
+  Interceptor.attach(Module.getExportByName(null, "_pthread_start"), {
     onEnter(args) {
       if (isThreadFollowed(this.threadId)) {
         return;
       }
-      const functionAddress = args[2];
-      Interceptor.attach(functionAddress, {
-        onEnter(args) {
-          FollowThread(this.threadId);
-        },
-        onLeave(retVal) {
-          UnfollowThread(this.threadId);
-        },
-      });
+      FollowThread(this.threadId);
     },
+    onLeave(retVal) {
+        UnfollowThread(this.threadId);
+    }
   });
 }
 
