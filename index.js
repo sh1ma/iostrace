@@ -31,6 +31,8 @@ async function run(name) {
       } else {
         console.log(`Mach Trap(${calledNum}) ${payload.moduleAddress}`)
       }
+    } else {
+      console.log(JSON.stringify(msg))
     }
   });
   await device.resume(pid)
